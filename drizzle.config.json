@@ -1,0 +1,9 @@
+{
+  "out": "./migrations-folder",
+  "schema": "./src/schemas/schema.js",
+  "breakpoints": false,
+  "driver": "pg",
+  "dbCredentials": {
+    "connectionString": "postgresql://top_ideas_owner:aZUjBG52DVoy@ep-polished-star-a143c8xl.ap-southeast-1.aws.neon.tech/top-ideas?sslmode=require"
+  }
+}
