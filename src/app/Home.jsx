@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { desc } from "drizzle-orm";
 
 import { db } from "../utils";
@@ -13,27 +13,27 @@ export default function Home() {
   const params = useLocation().hash.substring(1);
   const [ideaList, setIdeaList] = useState([]);
 
-  useEffect(() => {
-    const getAllIdeas = async () => {
-      const res = await db
-        .select()
-        .from(Ideas)
-        .orderBy(
-          desc(params === "hot" || params === "top" ? Ideas.vote : Ideas.id)
-        )
-        .limit(20);
-      setIdeaList(res);
-    };
-
-    getAllIdeas();
+  const getAllIdeas = useCallback(async () => {
+    const res = await db
+      .select()
+      .from(Ideas)
+      .orderBy(
+        desc(params === "hot" || params === "top" ? Ideas.vote : Ideas.id)
+      )
+      .limit(20);
+    setIdeaList(res);
   }, [params]);
+
+  useEffect(() => {
+    getAllIdeas();
+  }, [getAllIdeas]);
 
   return (
     <div>
       <Header />
       <Hero />
       <Tabs />
-      <IdeaList ideaList={ideaList} />
+      <IdeaList ideaList={ideaList} refreshData={getAllIdeas} />
     </div>
   );
 }
